@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">📊 Advanced Business Analytics</h2>
+
+<!-- KPI CARDS -->
+
+<div class="row">
+
+<div class="col-md-4">
+<div class="card p-4 shadow text-center">
+<h5>🏆 Best Sales Month</h5>
+<h3>{{ best_month }}</h3>
+<p class="text-success fw-bold">₹{{ best_revenue }}</p>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-4 shadow text-center">
+<h5>💰 Total Revenue</h5>
+<h3 class="counter" data-target="{{ total_revenue }}">0</h3>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-4 shadow text-center">
+<h5>📈 Avg Monthly Revenue</h5>
+<h3 class="counter" data-target="{{ avg_monthly_revenue }}">0</h3>
+</div>
+</div>
+
+</div>
+
+<hr class="mt-4">
+
+<!-- CHARTS -->
+
+<div class="row mt-4">
+
+<div class="col-md-6">
+<div class="card p-4 shadow">
+<h4 class="mb-3">📦 Category Sales</h4>
+<canvas id="categoryChart"></canvas>
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="card p-4 shadow">
+<h4 class="mb-3">📈 Monthly Revenue</h4>
+<canvas id="monthlyChart"></canvas>
+</div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+/* DATA FROM FLASK */
+
+const categoryLabels = {{ category_labels | safe }};
+const categoryValues = {{ category_values | safe }};
+const monthlyLabels = {{ monthly_labels | safe }};
+const monthlyValues = {{ monthly_values | safe }};
+
+
+/* CATEGORY PIE CHART */
+
+new Chart(document.getElementById('categoryChart'), {
+
+type: 'pie',
+
+data: {
+labels: categoryLabels,
+
+datasets: [{
+data: categoryValues,
+
+backgroundColor:[
+"#3b82f6",
+"#6366f1",
+"#10b981",
+"#f59e0b",
+"#ef4444",
+"#8b5cf6"
+]
+
+}]
+}
+
+});
+
+
+/* MONTHLY REVENUE CHART */
+
+new Chart(document.getElementById('monthlyChart'), {
+
+type: 'line',
+
+data: {
+labels: monthlyLabels,
+
+datasets: [{
+label: 'Revenue',
+
+data: monthlyValues,
+
+borderColor:"#3b82f6",
+
+backgroundColor:"rgba(59,130,246,0.2)",
+
+tension:0.4,
+
+fill:true
+
+}]
+},
+
+options:{
+responsive:true
+}
+
+});
+
+
+/* COUNTER ANIMATION */
+
+const counters = document.querySelectorAll(".counter");
+
+counters.forEach(counter => {
+
+counter.innerText = "0";
+
+const updateCounter = () => {
+
+const target = +counter.getAttribute("data-target");
+
+const current = +counter.innerText;
+
+const increment = target / 200;
+
+if(current < target){
+
+counter.innerText = Math.ceil(current + increment);
+
+setTimeout(updateCounter,10);
+
+}
+
+else{
+
+counter.innerText = target;
+
+}
+
+};
+
+updateCounter();
+
+});
+
+</script>
+
+{% endblock %}
