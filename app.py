@@ -6,10 +6,9 @@ from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 from flask import jsonify
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-
-
-app = Flask(__name__, template_folder="templates")
+app = Flask(__name__, template_folder=os.path.join(BASE_DIR,"templates"))
 app.secret_key = "secretkey"
 
 # ================= DATABASE INIT =================
@@ -470,4 +469,5 @@ def logout():
 if __name__ == "__main__":
     app.run(debug=True)
     
+
 
