@@ -9,7 +9,7 @@ from flask import jsonify
 
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 app.secret_key = "secretkey"
 
 # ================= DATABASE INIT =================
@@ -470,3 +470,4 @@ def logout():
 if __name__ == "__main__":
     app.run(debug=True)
     
+
