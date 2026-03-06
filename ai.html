@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>🚀 AI Smart Forecast Engine</h2>
+
+{% if insights %}
+<div class="row mt-4">
+
+{% for item in insights %}
+
+<div class="col-md-4 mb-4">
+
+<div class="card p-4 shadow-lg">
+
+<h4>{{ item.name }}</h4>
+
+<p><b>Current Daily Avg:</b> {{ item.current_avg }}</p>
+
+<p><b>Predicted Next 7 Days:</b> {{ item.predicted_week }}</p>
+
+<p><b>Recommended Reorder Qty:</b> {{ item.reorder }}</p>
+
+<p><b>Status:</b> {{ item.risk }}</p>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+{% else %}
+
+<p>No AI data available.</p>
+
+{% endif %}
+
+<hr class="mt-5">
+
+
+<!-- SALES TREND CHART -->
+
+{% if chart_data and chart_data.labels %}
+
+<h4>📊 Multi-Product Sales Trend</h4>
+
+<div class="card p-4 shadow">
+
+<canvas id="multiChart"></canvas>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('multiChart');
+
+new Chart(ctx, {
+
+type: 'line',
+
+data: {
+
+labels: {{ chart_data.labels|tojson }},
+
+datasets: {{ chart_data.datasets|tojson }}
+
+},
+
+options: {
+
+responsive: true,
+
+plugins:{
+legend:{
+position:'top'
+}
+}
+
+}
+
+});
+
+</script>
+
+{% endif %}
+
+<hr class="mt-5">
+
+
+<!-- AI BUSINESS ADVISOR -->
+
+{% if business_insights %}
+
+<h3>🤖 AI Business Advisor</h3>
+
+<div class="row mt-4">
+
+{% for tip in business_insights %}
+
+<div class="col-md-4 mb-3">
+
+<div class="card p-3 shadow">
+
+<h5>{{ tip }}</h5>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}
